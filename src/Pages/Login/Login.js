@@ -1,12 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 
 const Login = () => {
     const [err, setErr] = useState(null)
-    const {login} = useContext(AuthContext)
+    const {login, setLoading} = useContext(AuthContext)
     const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || "/";
     const handleLogin = (event) => {
         event.preventDefault();
         const form = event.target;
@@ -15,11 +18,19 @@ const Login = () => {
         login(email, password)
         .then(result => {
             const user = result.user;
-            console.log(user)
+            setErr(null)
             form.reset()
-            navigate("/")
+            if(user.emailVerified){
+                navigate(from, {replace:true})
+            }
+            else {
+                toast.error("Your email is not verified")
+            }
         })
-        .catch(error => setErr(error))
+        .catch(error => setErr(error.message))
+        .finally(() => {
+            setLoading(false)
+        })
     }
     return (
         <Form onSubmit={handleLogin}>

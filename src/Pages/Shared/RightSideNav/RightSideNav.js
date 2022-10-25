@@ -4,15 +4,21 @@ import { ListGroup } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { FaGoogle, FaGithub, FaTwitter, FaFacebook, FaWhatsapp, FaInstagram, FaTelegram } from "react-icons/fa";
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 import BrandCarousel from '../BrandCarousel/BrandCarousel';
 
 const RightSideNav = () => {
-    const {providerLogin} = useContext(AuthContext)
+    const {providerLogin} = useContext(AuthContext);
+    const nevigate = useNavigate();
     const googleProvider = new GoogleAuthProvider();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
     const handleGoogleLogin = () => {
         providerLogin(googleProvider)
-        .then(result => {})
+        .then(result => {
+            nevigate(from, {replace:true})
+        })
         .catch(error => console.error(error))
     }
     return (

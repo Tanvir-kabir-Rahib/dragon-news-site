@@ -40,11 +40,11 @@ const Header = () => {
                         user?.uid ?
                             <>
                                 <Nav className='d-flex align-items-center'>
-                                    {
+                                    <Link to="/profile">{
                                         user?.photoURL ?
                                             <Image src={user?.photoURL} style={{ height: "45px", width: "45px" }} roundedCircle></Image> :
                                             <FaUserAlt></FaUserAlt>
-                                    }
+                                    }</Link>
                                     <NavDropdown title={user?.displayName} id="collasible-nav-dropdown">
                                         <NavDropdown.Item onClick={handleLogOut} className="d-flex align-items-center justify-content-evenly">
                                             <span>Log Out</span> <FaArrowRight></FaArrowRight>
